@@ -4,3 +4,6 @@ set -eo pipefail
 
 echo "Post Deploy Test!"
 echo $INTERNAL_IP_ADDRESS
+echo $INTERNAL_PORT
+echo $IMAGE_TAG
+echo $APP
