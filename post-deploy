@@ -10,3 +10,7 @@ echo $INTERNAL_IP_ADDRESS
 echo $INTERNAL_PORT
 echo $IMAGE_TAG
 echo $APP
+pwd
+
+NEW_INTERNAL_IP=$(cat $APP/nginx.conf | grep "server .*5000" | awk '$1 == "server" {print $2}' | cut -f1 -d":")
+echo $NEW_INTERNAL_IP
