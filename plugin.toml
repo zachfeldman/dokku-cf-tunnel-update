@@ -1,0 +1,4 @@
+[plugin]
+description = "dokku CloudFlare tunnel update (unofficial, no affiliation with Cloudflare)"
+version = "0.1.0"
+[plugin.config]
