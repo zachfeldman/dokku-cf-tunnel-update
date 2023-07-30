@@ -3,14 +3,31 @@ set -eo pipefail
 [[ $DOKKU_TRACE ]] && set -x
 
 
-declare APP="$1" INTERNAL_PORT="$2" INTERNAL_IP_ADDRESS="$3" IMAGE_TAG="$4"
+declare APP="$1"
 
-echo "Post Deploy Test!"
-echo $INTERNAL_IP_ADDRESS
-echo $INTERNAL_PORT
-echo $IMAGE_TAG
-echo $APP
-pwd
+echo "Setting Cloudflare Tunnel Internal Service URL"
+echo "Reading new internal IP and port"
 
-NEW_INTERNAL_IP=$(cat /home/dokku/$APP/nginx.conf | grep "server .*5000" | awk '$1 == "server" {print $2}' | cut -f1 -d":")
-echo $NEW_INTERNAL_IP
+NEW_INTERNAL_IP_AND_PORT=$(cat /home/dokku/$APP/nginx.conf | grep "server .*5000" | awk '$1 == "server" {print $2}' | cut -f1 -d";")
+echo "Setting Cloudflare Tunnel Internal Service URL to $NEW_INTERNAL_IP_AND_PORT"
+
+curl --request PUT \
+  --url https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_UUID/cfd_tunnel/$CF_TUNNEL_UUID/configurations \
+  --header 'Content-Type: application/json' \
+  --header 'X-Auth-Email: '$CF_AUTH_EMAIL \
+  --header 'X-Auth-Key: '$CF_AUTH_KEY \
+  --data '{
+  "config": {
+    "ingress": [
+      {
+        "hostname": "'$CF_DOMAIN_NAME'",
+        "service": "http://'$NEW_INTERNAL_IP_AND_PORT'"
+      },
+      {
+        "service": "http_status:404"
+      }
+    ]
+  }
+}'
+
+echo "Cloudflare Tunnel IP and Port set successfully"
