@@ -6,10 +6,15 @@ set -eo pipefail
 declare APP="$1"
 
 echo "Setting Cloudflare Tunnel Internal Service URL"
-echo "Reading new internal IP and port"
 
+echo "Reading /home/dokku/.cf-tunnel-config file, if it exists, or using default"
+CF_TUNNEL_CONFIG_FILE=$(cat /home/dokku/.cf-tunnel-config) || true
+CF_TUNNEL_CONFIG=${CF_TUNNEL_CONFIG_FILE:-",{\"service\": \"http_status:404\"}"}
+
+echo "Reading new internal IP and port"
 NEW_INTERNAL_IP_AND_PORT=$(cat /home/dokku/$APP/nginx.conf | grep "server .*5000" | awk '$1 == "server" {print $2}' | cut -f1 -d";")
 echo "Setting Cloudflare Tunnel Internal Service URL to $NEW_INTERNAL_IP_AND_PORT"
+
 
 curl --request PUT \
   --url https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_UUID/cfd_tunnel/$CF_TUNNEL_UUID/configurations \
@@ -22,13 +27,10 @@ curl --request PUT \
       {
         "hostname": "'$CF_DOMAIN_NAME'",
         "service": "http://'$NEW_INTERNAL_IP_AND_PORT'"
-      },
-      {
-        "service": "http_status:404"
-      }
+      }'"$CF_TUNNEL_CONFIG"'
     ]
   }
 }'
 
 echo ""
-echo "Cloudflare Tunnel IP and Port set successfully"
+echo "Cloudflare Tunnel IP and Port request made"
