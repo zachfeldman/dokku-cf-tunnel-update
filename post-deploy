@@ -2,4 +2,5 @@
 set -eo pipefail
 [[ $DOKKU_TRACE ]] && set -x
 
+echo "Post Deploy Test!"
 echo $INTERNAL_IP_ADDRESS
