@@ -2,35 +2,12 @@
 set -eo pipefail
 [[ $DOKKU_TRACE ]] && set -x
 
+if ! command -v "ruby" &>/dev/null; then
+  dokku_log_fail "Missing ruby, install it (typically with sudo apt-get install ruby)"
+fi
 
 declare APP="$1"
 
-echo "Setting Cloudflare Tunnel Internal Service URL"
+echo "Running dokku-cf-tunnel-update Ruby script"
 
-echo "Reading /home/dokku/.cf-tunnel-config file, if it exists, or using default"
-CF_TUNNEL_CONFIG_FILE=$(cat /home/dokku/.cf-tunnel-config) || true
-CF_TUNNEL_CONFIG=${CF_TUNNEL_CONFIG_FILE:-",{\"service\": \"http_status:404\"}"}
-
-echo "Reading new internal IP and port"
-NEW_INTERNAL_IP_AND_PORT=$(cat /home/dokku/$APP/nginx.conf | grep "server .*5000" | awk '$1 == "server" {print $2}' | cut -f1 -d";")
-echo "Setting Cloudflare Tunnel Internal Service URL to $NEW_INTERNAL_IP_AND_PORT"
-
-
-curl --request PUT \
-  --url https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_UUID/cfd_tunnel/$CF_TUNNEL_UUID/configurations \
-  --header 'Content-Type: application/json' \
-  --header 'X-Auth-Email: '$CF_AUTH_EMAIL \
-  --header 'X-Auth-Key: '$CF_AUTH_KEY \
-  --data '{
-  "config": {
-    "ingress": [
-      {
-        "hostname": "'$CF_DOMAIN_NAME'",
-        "service": "http://'$NEW_INTERNAL_IP_AND_PORT'"
-      }'"$CF_TUNNEL_CONFIG"'
-    ]
-  }
-}'
-
-echo ""
-echo "Cloudflare Tunnel IP and Port request made"
+ruby /var/lib/dokku/plugins/enabled/cf-tunnel-update/dokku-cf-tunnel-update.rb
