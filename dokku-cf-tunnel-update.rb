@@ -24,7 +24,7 @@ dokku_app_list.each do |dokku_app|
 	if hostname && hostname != "" && service && service != ""
 		cf_tunnel_config.push({
 			"hostname" => hostname,
-			"service" => service
+			"service" => "http://#{service}"
 		})
 	end
 end
