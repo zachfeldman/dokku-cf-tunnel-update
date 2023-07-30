@@ -30,4 +30,5 @@ curl --request PUT \
   }
 }'
 
+echo ""
 echo "Cloudflare Tunnel IP and Port set successfully"
