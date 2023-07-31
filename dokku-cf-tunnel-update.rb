@@ -39,13 +39,10 @@ cf_account_uuid = ENV['CF_ACCOUNT_UUID']
 cf_tunnel_uuid = ENV['CF_TUNNEL_UUID']
 cloudflare_api_url = "https://api.cloudflare.com/client/v4/accounts/#{cf_account_uuid}/cfd_tunnel/#{cf_tunnel_uuid}/configurations"
 
-
-cf_auth_email = ENV['CF_AUTH_EMAIL']
-cf_auth_key = ENV['CF_AUTH_KEY']
+cf_auth_token = ENV['CF_AUTH_TOKEN']
 headers = {
   'Content-Type' => 'application/json',
-  'X-Auth-Email' => cf_auth_email,
-  'X-Auth-Key' => cf_auth_key
+  'Authorization' => "Bearer #{cf_auth_token}"
 }
 
 # Set up the request body
