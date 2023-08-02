@@ -12,5 +12,11 @@ source /home/dokku/.bashrc
 echo "Debug account UUID"
 echo $CF_ACCOUNT_UUID
 
+echo "debug whoami"
+whoami
+
+echo "debug pwd"
+pwd
+
 echo "Running dokku-cf-tunnel-update Ruby script"
 ruby /var/lib/dokku/plugins/enabled/cf-tunnel-update/dokku-cf-tunnel-update.rb
