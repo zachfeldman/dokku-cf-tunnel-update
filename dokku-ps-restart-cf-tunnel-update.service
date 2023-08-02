@@ -1,0 +1,12 @@
+[Unit]
+Description=Dokku app ps restart to ensure Cloudflare IPs are accurate
+Requires=dokku-redeploy.service
+After=dokku-redeploy.service
+
+[Service]
+Type=oneshot
+User=dokku
+ExecStart=/usr/bin/dokku ps:restart --all
+
+[Install]
+WantedBy=docker.service
