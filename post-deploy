@@ -6,5 +6,8 @@ if ! command -v "ruby" &>/dev/null; then
   dokku_log_fail "Missing ruby, install it (typically with sudo apt-get install ruby)"
 fi
 
+echo "Sourcing /home/dokku/.bashrc for credentials"
+source /home/dokku/.bashrc
+
 echo "Running dokku-cf-tunnel-update Ruby script"
 ruby /var/lib/dokku/plugins/enabled/cf-tunnel-update/dokku-cf-tunnel-update.rb
