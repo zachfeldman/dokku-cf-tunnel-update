@@ -6,17 +6,8 @@ if ! command -v "ruby" &>/dev/null; then
   dokku_log_fail "Missing ruby, install it (typically with sudo apt-get install ruby)"
 fi
 
-echo "Sourcing /home/dokku/.cf-tunnel-env for credentials"
+echo "Sourcing /home/dokku/.cf-tunnel-env for Cloudflare credentials"
 source /home/dokku/.cf-tunnel-env
-
-echo "Debug account UUID"
-echo $CF_ACCOUNT_UUID
-
-echo "debug whoami"
-whoami
-
-echo "debug pwd"
-pwd
 
 echo "Running dokku-cf-tunnel-update Ruby script"
 ruby /var/lib/dokku/plugins/enabled/cf-tunnel-update/dokku-cf-tunnel-update.rb

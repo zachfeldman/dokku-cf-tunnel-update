@@ -33,8 +33,6 @@ cf_tunnel_config.push({
 	"service" => "http_status:404"
 })
 
-puts cf_tunnel_config
-
 cf_account_uuid = ENV['CF_ACCOUNT_UUID']
 cf_tunnel_uuid = ENV['CF_TUNNEL_UUID']
 cloudflare_api_url = "https://api.cloudflare.com/client/v4/accounts/#{cf_account_uuid}/cfd_tunnel/#{cf_tunnel_uuid}/configurations"
