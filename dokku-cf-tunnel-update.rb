@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 require 'json'
 require 'net/http'
+require 'pry'
 
 DEFAULT_CF_TUNNEL_CONFIG_LOCATION = "/home/dokku/.cf-tunnel-config"
 
@@ -51,6 +52,8 @@ data = {
     "ingress": cf_tunnel_config
   }
 }
+
+binding.pry
 
 uri = URI(cloudflare_api_url)
 http = Net::HTTP.new(uri.host, uri.port)
