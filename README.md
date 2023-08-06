@@ -8,7 +8,7 @@ Expose Dokku apps on a home server via Cloudflare tunnels by keeping their servi
 
 - Install Ruby on your server (tested with Ruby 3.0.2)
 - Install the plugin `sudo dokku plugin:install https://github.com/zachfeldman/dokku-cf-tunnel-update`
-- Set your credentials in .bashrc or equivalent: `CF_AUTH_TOKEN`, `CF_ACCOUNT_UUID`, and `CF_TUNNEL_UUID` and source it (`CF_AUTH_TOKEN` is a Cloudflare API Token with the `Account:Cloudflare Tunnel:Edit` permission). 
+- Set your credentials at `/home/dokku/.cf-tunnel-env` for the program to find: `CF_AUTH_TOKEN`, `CF_ACCOUNT_UUID`, and `CF_TUNNEL_UUID` and source it (`CF_AUTH_TOKEN` is a Cloudflare API Token with the `Account:Cloudflare Tunnel:Edit` permission). 
   - You may need to set them in both your home user and the Dokku user depending on your context of deployment or app restart.
  - Run an app deployment or restart
    - *On the first run, you may need to add a CNAME record pointing to your Cloudflare tunnel*, which is usually <tunnel_uuid>.cfargotunnel.com
