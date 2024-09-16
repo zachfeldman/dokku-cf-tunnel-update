@@ -18,6 +18,8 @@ cf_tunnel_config = cf_tunnel_config_file_contents_as_json || []
 puts "Updating ingress list with current apps"
 dokku_app_list = `dokku apps:list`.split("\n")[1..-1]
 
+dokku_app_list.select!{ |dokku_app| dokku_app != 'snap'}
+
 dokku_app_list.each do |dokku_app|
 	hostname = `dokku domains:report #{dokku_app} --domains-app-vhosts`.tr("\n","")
 	service = `cat /home/dokku/#{dokku_app}/nginx.conf | grep "server .*5000" | awk '$1 == "server" {print $2}' | cut -f1 -d";"`.tr("\n","")
